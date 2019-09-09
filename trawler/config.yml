@@ -1,0 +1,18 @@
+database:
+    server: mongo
+    port: 27017
+    name: chum
+    collection: trawl
+download:
+    extensions: 
+        - zip
+        - exe
+        - msi
+        - mp4
+        - ps1
+        - txt
+        - log
+        - apk
+        - dll
+        - bin
+    folder: kits

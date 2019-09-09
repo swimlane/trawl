@@ -1,0 +1,6 @@
+bs4
+pyyaml
+requests
+wget
+tldextract
+pika
