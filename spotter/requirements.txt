@@ -1,0 +1,6 @@
+requests
+pendulum
+pyyaml
+bs4
+pika
+tweepy
