@@ -1,0 +1,75 @@
+# Docker Compose description of the combined application.
+#
+# 'docker-compose up' will run this.
+version: '3'  # requires Docker Compose 1.13 or later
+
+# This section describes the various containers (services).
+services:
+  
+  chum:
+    image: 'rabbitmq:management-alpine'
+    environment:
+      - RABBITMQ_DEFAULT_USER=trawl
+      - RABBITMQ_DEFAULT_PASS=spotter
+      - RABBITMQ_DEFAULT_VHOST=chum
+    hostname: chum
+    volumes:
+      - ./data/chum:/var/lib/rabbitmq/mnesia # This is the location where the rabbitmq queue will be saved in case of a failure
+    expose:
+      - 15672
+      - 5672
+    ports:
+      - 15672:15672
+      - 5672:5672
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost", "5672" ]
+      interval: 5s
+      timeout: 15s
+      retries: 1
+
+  entrails:
+    image: mongo
+    restart: always
+    volumes:
+      - ./entrails/db:/data/db # This is the location on your local machine where the entrails database documents will be stored
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    command: mongod --bind_ip_all
+
+  spotter:
+    # Identical to the consumer.
+    build:
+      context: .
+      dockerfile: spotter/Dockerfile
+    volumes:
+      - .:/spotter-data
+    restart: on-failure
+    depends_on:
+      - chum
+      - entrails
+    environment:
+      AMQP_URL: 'amqp://trawl:spotter@chum/chum?connection_attempts=5&retry_delay=5'
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+
+  trawler:
+    build:
+      context: .
+      dockerfile: trawler/Dockerfile
+    volumes:
+      - .:/trawler-data
+    restart: on-failure
+    depends_on:
+      - chum
+      - entrails
+    # Environment variables:
+    environment:
+      # The location of the RabbitMQ server.  "amqp" is the protocol;
+      # "chum" is the hostname.  Note that there is not a guarantee
+      # that the server will start first!  Telling the pika client library
+      # to try multiple times gets around this ordering issue.
+      AMQP_URL: 'amqp://trawl:spotter@chum/chum?connection_attempts=5&retry_delay=5'
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
