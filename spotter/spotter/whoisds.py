@@ -8,7 +8,7 @@ from spotter import Spotter
 
 class WhoisDs(Spotter):
 
-    URL = 'https://whoisds.com//whois-database/newly-registered-domains'
+    URL = 'https://www.whoisds.com//whois-database/newly-registered-domains'
 
     def get(self):
         latest_list = []
