@@ -2,13 +2,13 @@ FROM python:3.6-alpine
 
 WORKDIR /
 
-COPY entrails/requirements.txt entrails/
+COPY bones/requirements.txt bones/
 RUN pip install --upgrade pip
 RUN apk add --update --no-cache g++ gcc libxslt-dev
-RUN pip install -r /entrails/requirements.txt
-COPY entrails/ /entrails/
-WORKDIR /entrails/
-RUN export PYTHONPATH=/entrails/:$PYTHONPATH
+RUN pip install -r /bones/requirements.txt
+COPY bones/ /bones/
+WORKDIR /bones/
+RUN export PYTHONPATH=/bones/:$PYTHONPATH
 RUN python setup.py install
 
 

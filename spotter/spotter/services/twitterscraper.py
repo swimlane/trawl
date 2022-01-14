@@ -1,9 +1,8 @@
 import tweepy, yaml, re
-from spotter import Spotter
+from ..base import Base
 
 
-class TwitterScraper(Spotter):
-
+class TwitterScraper(Base):
 
     DEFANG_URL_FINDER = re.compile(r"(?:ftp|h(?:xx|tt)ps?)://\S+")
     DEFANG_DOMAIN_FINDER = re.compile(r"\s((?=\S+\[\.\])((?:[a-z0-9-]+)(?:\.|\[\.\]))+[a-z]{2,}\S+)")
@@ -13,7 +12,6 @@ class TwitterScraper(Spotter):
         auth = tweepy.OAuthHandler(self.config['twitter']['consumer_key'], self.config['twitter']['consumer_secret'])
         auth.set_access_token(self.config['twitter']['access_token_key'], self.config['twitter']['access_token_secret'])
         self.api = tweepy.API(auth)
-
 
     def retweeted(self, data):
         text = None
@@ -58,7 +56,6 @@ class TwitterScraper(Spotter):
 
         return return_list
 
-
     def on_status(self, tweet):
         if hasattr(tweet, "retweeted_status"):  # Check if Retweet
             try:
@@ -73,6 +70,7 @@ class TwitterScraper(Spotter):
 
     def get(self, since_id=None):
         return_list = []
+        self.__logger.info('In TwitterScraper and getting data')
         for tweet in tweepy.Cursor(self.api.search,
                            q="#opendir OR #phishkit OR #phishingkit",
                            count=100,
@@ -100,8 +98,7 @@ class TwitterScraper(Spotter):
                     expanded_url_list.append(url['expanded_url'])
             except:
                 pass
-            
-            
+
             return_dict.update({
                 'urls': url_list,
                 'expanded_urls': expanded_url_list,

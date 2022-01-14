@@ -1,6 +1,6 @@
 import requests, shutil
-from useragent import UserAgent
-from proxy import Proxy
+from .useragent import UserAgent
+from .proxy import Proxy
 
 
 

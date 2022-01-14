@@ -1,6 +1,8 @@
-# Entrails
+# Bones
 
-Entrails is a MongoDB python package to save and retrieve information from a mongodb database
+Bones is a Python package to save and retrieve information from a mongodb database.
+
+This package is used by both `spotter` and `trawler` to retrieve, save, and communicate with `entrails` (MongoDB container)
 
 ## Models
 

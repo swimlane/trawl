@@ -1,19 +1,18 @@
 from mongoengine import connect
 import datetime
-from .models import GutsModel
-from .models import SpottedModel
-from .entrail import Entrail
+from .models import GutsModel, SpottedModel
+from .bones import Bones
 
 
-class Guts(Entrail):
+class Guts(Bones):
      
     def save(self, name, storage_location, md5, sha1, sha256, original_url, timestamp=None, ssdeep=None):
-        spotted = SpottedModel().objects(url=original_url)
+        spotted = SpottedModel.objects(url=original_url)
 
         # If no spotted document then create one and retrieve it from our db
         if not spotted:
             self.spotted = SpottedModel(original_url)
-            spotted = SpottedModel().objects(url=original_url)
+            spotted = SpottedModel.objects(url=original_url)
             
         guts = GutsModel(
             name=name,

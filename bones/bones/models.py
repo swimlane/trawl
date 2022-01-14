@@ -1,5 +1,6 @@
-from mongoengine import *
+from mongoengine import Document, StringField, DateTimeField, IntField, ListField, ReferenceField
 import datetime
+
 
 class SounderModel(Document):
     service = StringField(required=True, unique=True)
@@ -23,7 +24,6 @@ class SpottedModel(Document):
     tweet_hash_tags = ListField(StringField())
     tweet_text = StringField()
     tweet_id = StringField()
-
 
 class GutsModel(Document):
     name = StringField(required=True)

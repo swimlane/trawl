@@ -1,13 +1,12 @@
 from mongoengine import connect
 from .models import SounderModel
-from .entrail import Entrail
+from .bones import Bones
 
 
-
-class Sounder(Entrail):
+class Sounder(Bones):
      
     def save(self, service, last_checked=None, day_interval=0, hour_interval=None, last_id=None):
-        sounder = SounderModel(
+        SounderModel(
             service=service,
             last_checked=None,
             day_interval=day_interval,
@@ -18,10 +17,8 @@ class Sounder(Entrail):
     def get(self, service=None):
         if service:
             try:
-                return SounderModel.objects.get(service=service)
+                return SounderModel.objects(service=service)
             except:
                 return None
         else:
             return SounderModel.objects
-            
-            

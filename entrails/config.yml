@@ -1,3 +1,0 @@
-database:
-  port: 27017
-  name: entrails

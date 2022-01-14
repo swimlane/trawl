@@ -1,15 +1,15 @@
-from spotter import Spotter
+from ..base import Base
 
 
-class PhishingDatabase(Spotter):
+class PhishingDatabase(Base):
 
     ACTIVE_URL = 'https://raw.githubusercontent.com/mitchellkrogza/Phishing.Database/master/phishing-domains-ACTIVE.txt'
     NEW_LAST_HOUR_URL = 'https://raw.githubusercontent.com/mitchellkrogza/Phishing.Database/master/phishing-domains-NEW-last-hour.txt'
     NEW_TODAY_URL = 'https://raw.githubusercontent.com/mitchellkrogza/Phishing.Database/master/phishing-links-ACTIVE-TODAY.txt'
 
     def get(self, active=True, last_hour=False, today=False):
-        return_list = []
         list_type = ''
+        self.__logger.info('In PhishingDatabase and getting data')
         if active:
             response = self.session.get(self.ACTIVE_URL)
             list_type = 'active'
@@ -22,5 +22,8 @@ class PhishingDatabase(Spotter):
         
         content = response.content
         for line in content.splitlines():
-            return_list.append(line)
-        return return_list
+            self.spotted.save(
+                    url=line,
+                    source='phishingdatabase'
+                )
+            self.publisher.post(line)

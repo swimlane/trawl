@@ -1,10 +1,10 @@
 from mongoengine import connect
 import datetime
 from .models import SpottedModel
-from .entrail import Entrail
+from .bones import Bones
 
 
-class Spotted(Entrail):
+class Spotted(Bones):
      
     def save(self, url=None, parsed_url=None, ipv4_address=None, ipv6_address=None, country=None, registrar=None, 
         domain=None, source=None, received=None, tweet_extracted_urls=None, tweet_urls=None, tweet_hash_tags=None,
@@ -28,8 +28,8 @@ class Spotted(Entrail):
 
     def get(self, url):
         try:
-            if SpottedModel().objects.get(url=url):
-                return True
+            if SpottedModel.objects(url=url):
+                return SpottedModel.objects(url=url)
             else:
                 return False
         except:

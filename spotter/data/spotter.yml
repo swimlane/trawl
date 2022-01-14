@@ -1,0 +1,59 @@
+clean-mx:
+  check-interval:
+    days: 0
+    hours: 2
+urlscan:
+  check-interval:
+    days: 0
+    hours: 2
+phishtank:
+  check-interval:
+    days: 0
+    hours: 2
+whoisds:
+  check-interval:
+    days: 1
+    hours: 0
+phishingdatabase:
+  check-interval:
+    days: 1
+    hours: 0
+openphish:
+  check-interval:
+    days: 0
+    hours: 2
+webanalyzer:
+  check-interval:
+    days: 0
+    hours: 2
+  tld:
+    - com
+    - net
+    - org
+    - info
+    - us
+    - biz
+    - cat
+    - club
+    - fun
+    - life
+    - live
+    - ltd
+    - pro
+    - shop
+    - store
+    - tech
+    - vip 
+    - ...
+#twitter:
+#  check-interval:
+#    days: 0
+#    hours: 2
+#  hashtags:
+#    - opendir
+#    - phishkit
+#    - phishingkit
+#  consumer_key: {CONSUMER_KEY}
+#  consumer_secret: {CONSUMER_SECRET}
+##  access_token_key: {ACCESS_TOKEN_KEY}
+ # access_token_secret: {ACCESS_TOKEN_SECRET}

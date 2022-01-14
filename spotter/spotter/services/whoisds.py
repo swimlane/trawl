@@ -2,11 +2,10 @@ import base64
 from datetime import date, datetime, timedelta
 from io import BytesIO
 from zipfile import ZipFile
+from ..base import Base
 
-from spotter import Spotter
 
-
-class WhoisDs(Spotter):
+class WhoisDs(Base):
 
     URL = 'https://whoisds.com//whois-database/newly-registered-domains'
 
@@ -16,7 +15,7 @@ class WhoisDs(Spotter):
 
         filename = "{}.zip".format(past)
         encoded_filename = base64.b64encode(filename.encode('utf-8'))
-        
+        self.__logger.info('In WHOISDS and getting data')
         response = self.session.get('{url}/{file_name}/nrd'.format(url=self.URL, file_name=encoded_filename.decode('ascii')))
         with BytesIO(response.content) as zip_file:
             with ZipFile(zip_file) as zip_file:

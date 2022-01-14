@@ -3,6 +3,7 @@ try:
 except ImportError:
     from urlparse import urlparse
 
+
 class Skin(object):
 
     def url(self, value):

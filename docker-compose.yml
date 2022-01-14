@@ -15,9 +15,6 @@ services:
     hostname: chum
     volumes:
       - ./data/chum:/var/lib/rabbitmq/mnesia # This is the location where the rabbitmq queue will be saved in case of a failure
-    expose:
-      - 15672
-      - 5672
     ports:
       - 15672:15672
       - 5672:5672
@@ -33,8 +30,8 @@ services:
     volumes:
       - ./entrails/db:/data/db # This is the location on your local machine where the entrails database documents will be stored
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
     command: mongod --bind_ip_all
 
   spotter:
@@ -43,15 +40,17 @@ services:
       context: .
       dockerfile: spotter/Dockerfile
     volumes:
-      - .:/spotter-data
+      - ./spotter/data:/spotter-data
     restart: on-failure
     depends_on:
       - chum
       - entrails
     environment:
-      AMQP_URL: 'amqp://trawl:spotter@chum/chum?connection_attempts=5&retry_delay=5'
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+      AMQP_URL: ${AMQP_URL}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_NAME: ${MONGO_INITDB_NAME}
+      MONGO_INITDB_PORT: ${MONGO_INITDB_PORT}
 
 
   trawler:
@@ -59,7 +58,7 @@ services:
       context: .
       dockerfile: trawler/Dockerfile
     volumes:
-      - .:/trawler-data
+      - ./trawler/data:/trawler-data
     restart: on-failure
     depends_on:
       - chum
@@ -70,6 +69,8 @@ services:
       # "chum" is the hostname.  Note that there is not a guarantee
       # that the server will start first!  Telling the pika client library
       # to try multiple times gets around this ordering issue.
-      AMQP_URL: 'amqp://trawl:spotter@chum/chum?connection_attempts=5&retry_delay=5'
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+      AMQP_URL: ${AMQP_URL}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_NAME: ${MONGO_INITDB_NAME}
+      MONGO_INITDB_PORT: ${MONGO_INITDB_PORT}

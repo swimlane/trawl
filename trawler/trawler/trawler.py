@@ -1,11 +1,11 @@
 import os, yaml
 from bs4 import BeautifulSoup
 
-from trawlbinary import BinaryTrawl
-from generator import Generator
-from parser import Parser
-from motor import Motor
-from skin import Skin
+from .trawlbinary import BinaryTrawl
+from .generator import Generator
+from .parser import Parser
+from .motor import Motor
+from .skin import Skin
 
 __CONFIG__ = ''
 

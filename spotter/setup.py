@@ -16,5 +16,8 @@ setup(
     keywords=['phishing', 'phish', 'phishkit'],
     url='https://github.com/swimlane/trawl',
     author='Swimlane',
-    author_email='info@swimlane.com'
+    author_email='info@swimlane.com',
+    package_data={
+        'spotter':  ['data/logging.yml', 'data/spotter.yml']
+    },
 )
